@@ -18,7 +18,7 @@ fn main() {
     // let repolist=get_repos(&server_url, un, &api_key);
     // println!("{:?}",repolist.len());
     let mut gtr=get_recent_commits(&server_url, un, &api_key);
-    // gtr.extend(get_recent_commits(&c_server_url, c_un, &c_api_key));
+    gtr.extend(get_recent_commits(&c_server_url, c_un, &c_api_key));
     gtr.sort_by(|a, b|{
         
         b.time.cmp(&a.time)
@@ -67,11 +67,30 @@ struct commits{
 }
 fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits> {
     let client = Client::new();
-    let url = format!("{}/api/v1/repos/{}/commits?access_token={}", server_url, repo, access_token);
+
+    let mut headers = HeaderMap::new();
+    headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
+    headers.insert(AUTHORIZATION, format!("{}", access_token).parse().unwrap());
+
+    let url = format!("{}/api/v1/repos/{}/commits", server_url, repo);
+    // println!("{}",url);
+    let responsept = 
+    // client.get(&url).send().unwrap();
+    client
+        .get(url)
+        .headers(headers)
+        .json(
+        &serde_json::json!({
+        // "limit": 50,
+        // "page": 1,
+        }
+        )
+    )
+        .send().unwrap();
     // println!("{:?}",url);
     //TODO: skip empty repo
     let mut y:Vec<commits>=Vec::new();
-    match client.get(&url).send().unwrap().json::<Vec<Value>>(){
+    match responsept.json::<Vec<Value>>(){
         Ok(response) => {
             y=response.into_iter().map(|commit|{
                 // println!("{:?}",commit);
