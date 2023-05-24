@@ -5,7 +5,34 @@ use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}
 use serde::{Serialize, Deserialize, Deserializer};
 use serde_json::{Value, json};
 use dotenv::dotenv;
+fn fetchnsavereponames(){
 
+    let api_key = env::var("API_KEY").unwrap();
+    let server_url = env::var("URL").unwrap();
+    let un="12core1";
+
+    let c_un="visnk";
+    let c_api_key = env::var("CODEBERG").unwrap();
+    let c_server_url = env::var("CODEBERG_URL").unwrap();
+
+    let repolist=get_repos(&server_url, un, &api_key);
+    println!("{:?}",repolist.len());
+
+    let mut serializedData = String::new();
+
+    for repo in repolist {
+        serializedData=[serializedData,repo,"\n".to_string()].concat();
+    }
+
+    let repolist2=get_repos(&c_server_url, c_un, &c_api_key);
+    println!("{:?}",repolist2.len());
+
+    for repo in repolist2 {
+        serializedData=[serializedData,repo,"\n".to_string()].concat();
+    }
+
+    prefstore::savecustom("gtr", "repos.txt", serializedData);
+}
 fn main() {
     dotenv().ok();
     let api_key = env::var("API_KEY").unwrap();
@@ -15,11 +42,7 @@ fn main() {
     let c_api_key = env::var("CODEBERG").unwrap();
     let c_server_url = env::var("CODEBERG_URL").unwrap();
     
-    // let repolist=get_repos(&server_url, un, &api_key);
-    // println!("{:?}",repolist.len());
     
-    // let repolist2=get_repos(&c_server_url, c_un, &c_api_key);
-    // println!("{:?}",repolist2.len());
 
     // let repolist=get_repos(&server_url, un, &api_key);
     // println!("{:?}",repolist.len());
@@ -27,7 +50,7 @@ fn main() {
     let mut gtr=get_recent_commits(&server_url, un, &api_key);
     println!("gitea={:?}",gtr.len());
     gtr.extend(get_recent_commits(&c_server_url, c_un, &c_api_key));
-    println!("codeberg+gitea={:?}",gtr.len());
+    // println!("codeberg+gitea={:?}",gtr.len());
 
     gtr.sort_by(|a, b|{
         b.time.cmp(&a.time)
@@ -53,10 +76,10 @@ fn get_repos(server_url: &str, user: &str, access_token: &str) -> Vec<String> {
     client
         .get(url)
         .headers(headers)
-        .json(&serde_json::json!({
-            // "limit": 50,
-            // "page": 1,
-        }))
+        // .json(&serde_json::json!({
+        //     // "limit": 50,
+        //     // "page": 1,
+        // }))
         .send().unwrap();
     // println!("{:?}",responsept);
     let response = responsept.json::<Vec<Value>>().unwrap();
@@ -89,13 +112,13 @@ fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits>
     client
         .get(url)
         .headers(headers)
-        .json(
-        &serde_json::json!({
-        // "limit": 50,
-        // "page": 1,
-        }
-        )
-    )
+    //     .json(
+    //     &serde_json::json!({
+    //     // "limit": 50,
+    //     // "page": 1,
+    //     }
+    //     )
+    // )
         .send().unwrap();
     // println!("{:?}",url);
     //TODO: skip empty repo
@@ -144,7 +167,7 @@ fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits>
                 // "".to_string()
             }
             )
-            // .take(2)
+            .take(1)
             .collect();
         },
         Err(err) => {
@@ -176,9 +199,9 @@ fn datetest(){
 fn get_recent_commits(server_url: &str, user: &str, access_token: &str) -> Vec<commits> {
     let repos = get_repos(server_url, user, access_token);
     let mut commits = Vec::new();
-    for repo in repos {
+    let iop:()=repos.iter().map(|repo| {
         commits.extend(get_commits(server_url, &repo, access_token));
-    }
+    }).collect();
 //     commits.sort_by(|a, b|{
         
 //         a.time.cmp(&b.time)
@@ -186,6 +209,6 @@ fn get_recent_commits(server_url: &str, user: &str, access_token: &str) -> Vec<c
 // );
     commits
     .into_iter()
-    // .take(5)
+    // .take(1)
     .collect()
 }
