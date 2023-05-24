@@ -1,7 +1,7 @@
 use std::env;
 
 use chrono::{DateTime, FixedOffset, NaiveDateTime};
-use reqwest::blocking::Client;
+use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
 use serde::{Serialize, Deserialize, Deserializer};
 use serde_json::{Value, json};
 use dotenv::dotenv;
@@ -14,32 +14,50 @@ fn main() {
     let c_un="visnk";
     let c_api_key = env::var("CODEBERG").unwrap();
     let c_server_url = env::var("CODEBERG_URL").unwrap();
-
+    
     // let repolist=get_repos(&server_url, un, &api_key);
     // println!("{:?}",repolist.len());
     
     // let repolist2=get_repos(&c_server_url, c_un, &c_api_key);
     // println!("{:?}",repolist2.len());
+
+    // let repolist=get_repos(&server_url, un, &api_key);
+    // println!("{:?}",repolist.len());
+
     let mut gtr=get_recent_commits(&server_url, un, &api_key);
-    println!("gitea= {}",gtr.len());
+    println!("gitea={:?}",gtr.len());
     gtr.extend(get_recent_commits(&c_server_url, c_un, &c_api_key));
-    println!("codeberg+gitea= {}",gtr.len());
-    
+    println!("codeberg+gitea={:?}",gtr.len());
+
     gtr.sort_by(|a, b|{
-        
         b.time.cmp(&a.time)
     });
-    // for i in &gtr{
-    //     println!("{}",i.time)
-    // }
+    // // for i in &gtr{
+    // //     println!("{}",i.time)
+    // // }
+
     prefstore::savecustom("gtr","gtr.json",serde_json::to_string(&gtr).unwrap());
+    // prefstore::appendcustom("gtr","gtr.json",serde_json::to_string(&gtr1).unwrap());
 }
 fn get_repos(server_url: &str, user: &str, access_token: &str) -> Vec<String> {
     let client = Client::new();
 
-    let url = format!("{}/api/v1/users/{}/repos?access_token={}&limit=50", server_url, user, access_token);
+    let mut headers = HeaderMap::new();
+    headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
+    headers.insert(AUTHORIZATION, format!("{}", access_token).parse().unwrap());
+
+    let url = format!("{}/api/v1/users/{}/repos?limit={}", server_url, user,50);
     // println!("{}",url);
-    let responsept = client.get(&url).send().unwrap();
+    let responsept = 
+    // client.get(&url).send().unwrap();
+    client
+        .get(url)
+        .headers(headers)
+        .json(&serde_json::json!({
+            // "limit": 50,
+            // "page": 1,
+        }))
+        .send().unwrap();
     // println!("{:?}",responsept);
     let response = responsept.json::<Vec<Value>>().unwrap();
     response.into_iter().map(|repo| repo["full_name"].as_str().unwrap().to_string()).collect()
@@ -59,11 +77,30 @@ struct commits{
 }
 fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits> {
     let client = Client::new();
-    let url = format!("{}/api/v1/repos/{}/commits?access_token={}", server_url, repo, access_token);
+
+    let mut headers = HeaderMap::new();
+    headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
+    headers.insert(AUTHORIZATION, format!("{}", access_token).parse().unwrap());
+
+    let url = format!("{}/api/v1/repos/{}/commits?limit={}", server_url, repo,100);
+    // println!("{}",url);
+    let responsept = 
+    // client.get(&url).send().unwrap();
+    client
+        .get(url)
+        .headers(headers)
+        .json(
+        &serde_json::json!({
+        // "limit": 50,
+        // "page": 1,
+        }
+        )
+    )
+        .send().unwrap();
     // println!("{:?}",url);
     //TODO: skip empty repo
     let mut y:Vec<commits>=Vec::new();
-    match client.get(&url).send().unwrap().json::<Vec<Value>>(){
+    match responsept.json::<Vec<Value>>(){
         Ok(response) => {
             y=response.into_iter().map(|commit|{
                 // println!("{:?}",commit);
