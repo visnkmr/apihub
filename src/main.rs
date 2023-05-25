@@ -47,12 +47,24 @@ fn main() {
     // let repolist=get_repos(&server_url, un, &api_key);
     // println!("{:?}",repolist.len());
 
-    let mut gtr=get_recent_commits(&server_url, un, &api_key);
+    let r1=get_recent_commits(&server_url, un, &api_key);
+    let r2=get_recent_commits(&c_server_url, c_un, &c_api_key);
+    let mut gtr=r1.0;
     println!("gitea={:?}",gtr.len());
-    gtr.extend(get_recent_commits(&c_server_url, c_un, &c_api_key));
+    gtr.extend(r2.0);
+    
     // println!("codeberg+gitea={:?}",gtr.len());
 
     gtr.sort_by(|a, b|{
+        b.time.cmp(&a.time)
+    });
+
+    let mut gtrl=r1.1;
+    gtrl.extend(r2.1);
+    
+    // println!("codeberg+gitea={:?}",gtr.len());
+
+    gtrl.sort_by(|a, b|{
         b.time.cmp(&a.time)
     });
     // // for i in &gtr{
@@ -60,6 +72,7 @@ fn main() {
     // // }
 
     prefstore::savecustom("gtr","gtr.json",serde_json::to_string(&gtr).unwrap());
+    prefstore::savecustom("gtr","gtrl.json",serde_json::to_string(&gtrl).unwrap());
     // prefstore::appendcustom("gtr","gtr.json",serde_json::to_string(&gtr1).unwrap());
 }
 fn get_repos(server_url: &str, user: &str, access_token: &str) -> Vec<String> {
@@ -98,7 +111,7 @@ struct commits{
     committer:String,
     commit:String,
 }
-fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits> {
+fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Result<(Vec<commits>,commits),()> {
     let client = Client::new();
 
     let mut headers = HeaderMap::new();
@@ -167,14 +180,16 @@ fn get_commits(server_url: &str, repo: &str, access_token: &str) -> Vec<commits>
                 // "".to_string()
             }
             )
-            .take(1)
+            // .take(1)
             .collect();
+        Ok((y.clone(),y[0].clone()))
+
         },
         Err(err) => {
             eprintln!("Failed to deserialize JSON response: {}", err);
+            Err(())
         },
     }
-    y
 
 }
 fn print_key_value_pairs(value: &Value) {
@@ -196,19 +211,31 @@ fn datetest(){
 
                                     // .with_timezone(&FixedOffset::east_opt(5*3600+30*60).unwrap());
 }
-fn get_recent_commits(server_url: &str, user: &str, access_token: &str) -> Vec<commits> {
+fn get_recent_commits(server_url: &str, user: &str, access_token: &str) -> (Vec<commits>,Vec<commits>) {
     let repos = get_repos(server_url, user, access_token);
     let mut commits = Vec::new();
+    let mut lastcommits = Vec::new();
     let iop:()=repos.iter().map(|repo| {
-        commits.extend(get_commits(server_url, &repo, access_token));
+        match(get_commits(server_url, &repo, access_token)){
+            Ok(getclist) => {
+                commits.extend(getclist.0);
+                lastcommits.push(getclist.1);
+                
+            },
+            Err(_) => {
+
+            },
+        }
     }).collect();
 //     commits.sort_by(|a, b|{
         
 //         a.time.cmp(&b.time)
 //     }
 // );
-    commits
-    .into_iter()
-    // .take(1)
-    .collect()
+    // commits
+    // .into_iter()
+    // // .take(1)
+    // .collect()
+    (commits,lastcommits)
 }
+
