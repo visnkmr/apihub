@@ -1,6 +1,7 @@
 use std::env;
 
 use chrono::{DateTime, FixedOffset, NaiveDateTime};
+use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
 use serde::{Serialize, Deserialize, Deserializer};
 use serde_json::{Value, json};
@@ -33,6 +34,71 @@ fn fetchnsavereponames(){
 
     prefstore::savecustom("gtr", "repos.txt", serializedData);
 }
+fn changesincodeperrepo(server_url: &str, user: &str, access_token: &str) -> (Vec<codechanges>) {
+    let repos = get_repos(server_url, user, access_token);
+    let mut codec = Vec::new();
+    let iop:()=repos.iter().map(|repo| {
+        let mut additions=0;
+        let mut deletions=0;
+        match(get_commits(server_url, &repo, access_token)){
+            Ok(getclist) => {
+                additions=getclist.0.iter().map(|ic|{
+                    ic.additions
+                }).sum();
+                deletions=getclist.0.iter().map(|ic|{
+                    ic.deletions
+                }).sum();
+                codec.push(codechanges{
+                    reponame: repo.clone(),
+                    additions,
+                    deletions,
+                    // total: additions+deletions,
+                })
+                // commits.extend(getclist.0.);
+                
+            },
+            Err(_) => {
+
+            },
+        }
+   
+    }).collect();
+//     commits.sort_by(|a, b|{
+        
+//         a.time.cmp(&b.time)
+//     }
+// );
+    // commits
+    // .into_iter()
+    // // .take(1)
+    // .collect()
+    (codec)
+
+
+}
+// #[test]
+fn completestats(){
+    dotenv().ok();
+    let api_key = env::var("API_KEY").unwrap();
+    let server_url = env::var("URL").unwrap();
+    let un="12core1";
+    let c_un="visnk";
+    let c_api_key = env::var("CODEBERG").unwrap();
+    let c_server_url = env::var("CODEBERG_URL").unwrap();
+    let mut r1=changesincodeperrepo(&server_url, un, &api_key);
+    r1.extend(changesincodeperrepo(&c_server_url, c_un, &c_api_key));
+    let mut taar=0;//total addition across repos
+    let mut tdar=0;//total deletions across repos
+    r1.sort_by(|a, b|{
+        b.additions.cmp(&a.additions)
+    });
+    for o in r1{
+        println!("{:?}",o);
+        taar+=o.additions;
+        tdar+=o.deletions;
+    }
+    println!("LOCs written: +{} -{}",taar,tdar);
+}
 fn main() {
     dotenv().ok();
     let api_key = env::var("API_KEY").unwrap();
@@ -41,6 +107,7 @@ fn main() {
     let c_un="visnk";
     let c_api_key = env::var("CODEBERG").unwrap();
     let c_server_url = env::var("CODEBERG_URL").unwrap();
+    
     
     
 
@@ -53,7 +120,7 @@ fn main() {
     println!("gitea={:?}",gtr.len());
     gtr.extend(r2.0);
     
-    // println!("codeberg+gitea={:?}",gtr.len());
+    // // println!("codeberg+gitea={:?}",gtr.len());
 
     gtr.sort_by(|a, b|{
         b.time.cmp(&a.time)
@@ -62,14 +129,14 @@ fn main() {
     let mut gtrl=r1.1;
     gtrl.extend(r2.1);
     
-    // println!("codeberg+gitea={:?}",gtr.len());
+    // // println!("codeberg+gitea={:?}",gtr.len());
 
     gtrl.sort_by(|a, b|{
         b.time.cmp(&a.time)
     });
-    // // for i in &gtr{
-    // //     println!("{}",i.time)
-    // // }
+    // // // for i in &gtr{
+    // // //     println!("{}",i.time)
+    // // // }
 
     prefstore::savecustom("gtr","gtr.json",serde_json::to_string(&gtr).unwrap());
     prefstore::savecustom("gtr","gtrl.json",serde_json::to_string(&gtrl).unwrap());
@@ -100,7 +167,13 @@ fn get_repos(server_url: &str, user: &str, access_token: &str) -> Vec<String> {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
-
+struct codechanges{
+    reponame:String,
+    additions:u64,
+    deletions:u64,
+    // total:u64,
+}
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
 struct commits{
     reponame:String,
     additions:u64,
