@@ -1,6 +1,6 @@
 use std::env;
 
-use chrono::{DateTime, FixedOffset, NaiveDateTime};
+use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
 use serde::{Serialize, Deserialize, Deserializer};
@@ -77,6 +77,7 @@ fn changesincodeperrepo(server_url: &str, user: &str, access_token: &str) -> (Ve
 
 }
 // #[test]
+//the codeberg and gitea server stats getting api
 fn completestats(){
     dotenv().ok();
     let api_key = env::var("API_KEY").unwrap();
@@ -99,8 +100,122 @@ fn completestats(){
     }
     println!("LOCs written: +{} -{}",taar,tdar);
 }
-fn main() {
+#[derive(Deserialize, Debug)]
+struct App {
+    id: String,
+    app_secret: String,
+    description: Option<String>,
+    display_name: String,
+    name: String,
+    os: String,
+    platform: String,
+    origin: String,
+    icon_url: Option<String>,
+    created_at: String,
+    updated_at: String,
+    release_type: Option<String>,
+    owner: Owner,
+    azure_subscription: Option<String>,
+    member_permissions: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
+struct Owner {
+    id: String,
+    avatar_url: Option<String>,
+    display_name: String,
+    email: String,
+    name: String,
+    r#type: String,
+}
+#[derive(Deserialize, Debug)]
+
+struct sessioncount{
+    datetime:String,
+    count:i32
+}
+
+
+use mysql::{Pool,  QueryResult, prelude::Queryable};
+#[tokio::main]
+async fn main()-> Result<(), Box<dyn std::error::Error>>{
     dotenv().ok();
+
+    let ac_key = env::var("APPCENTER_KEY").unwrap();
+    let ac_uname = env::var("APPCENTER_UNAME").unwrap();
+    let ac_appname = env::var("APPCENTER_APPNAME").unwrap();
+
+    let get_apps_url = "https://api.appcenter.ms/v0.1/apps";
+   
+
+
+    // let client = reqwest::Client::new();
+    // let response = client
+    //     .get(get_apps_url)
+    //     .header("accept", "application/json")
+    //     .header("X-API-Token", ac_key)
+    //     .send()
+    //     .await?;    
+
+    // println!("Response: {:?}", response);
+    // println!("{:?}",response.text().await?);
+    // let search_results= serde_json::to_string(response.json().await?).unwrap();
+    // let search_results: Vec<App> = response.json().await?;
+    // for eacha in search_results{
+
+    //     println!("{:?}", eacha.name);
+    // }
+
+    
+    let today = Utc::now();
+    let date_28_days_ago = (today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
+
+    println!("{}",date_28_days_ago);
+    let get_apps_url = format!("https://api.appcenter.ms/v0.1/apps/{}/{}/analytics/session_counts?start={}",ac_uname,ac_appname,date_28_days_ago);
+    let client = reqwest::Client::new();
+    let response = client
+        .get(get_apps_url)
+        .header("accept", "application/json")
+        .header("X-API-Token", ac_key)
+        .send()
+        .await?;  
+    let search_results: Vec<sessioncount> = response.json().await?;
+    for eacha in search_results{
+
+            println!("{:?}", eacha.count);
+        }
+    // theotherone();
+    
+    Ok(())
+}
+fn planetscaleapi(){
+    let url = env::var("DATABASE_URL").expect("DATABASE_URL not found");
+
+    let builder = mysql::OptsBuilder::from_opts(mysql::Opts::from_url(&url).unwrap());
+
+    let pool = mysql::Pool::new(builder.ssl_opts(mysql::SslOpts::default())).unwrap();
+
+    let mut _conn = pool.get_conn().unwrap();
+
+    println!("Successfully connected to PlanetScale!");
+    let query = "SELECT * FROM test_table";
+    let mut results = _conn.query_map(query, |row:mysql::Row| {
+        let id: i32 = row.get(0).unwrap();
+        let name: String = row.get(1).unwrap();
+        let age: i32 = row.get(2).unwrap();
+        ((id, name, age))
+    });
+
+    for result in results.unwrap() {
+        // for i in result {
+
+            let (id, name, age) = result;
+            println!("ID: {}, Name: {}, Age: {}", id, name, age);
+        // }
+    }
+}
+//gitea codeberg commit get api and sort by timestamp
+fn theotherone() {
     let api_key = env::var("API_KEY").unwrap();
     let server_url = env::var("URL").unwrap();
     let un="12core1";
@@ -129,7 +244,7 @@ fn main() {
     let mut gtrl=r1.1;
     gtrl.extend(r2.1);
     
-    // // println!("codeberg+gitea={:?}",gtr.len());
+    println!("codeberg+gitea={:?}",gtr.len());
 
     gtrl.sort_by(|a, b|{
         b.time.cmp(&a.time)
