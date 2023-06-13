@@ -27,10 +27,10 @@ async fn main()-> Result<(), Box<dyn std::error::Error>>{
 
     dotenv().ok();
     // commitstojson::commitstojson();
-    // let vecstoadd:Vec<sessioncount>=appcentervecapi("session_counts").await?;
-    let vecstoadd:Vec<eachevent>=eventsapi("events").await?;
+    let vecstoadd:Vec<sessioncount>=appcentervecapi("session_counts").await?;
+    // let vecstoadd:Vec<eachevent>=eventsapi("events").await?;
     // let vecstoadd:Vec<oses>=osapi("oses").await?;
-    println!("{:?}",vecstoadd);
+    // println!("{:?}",vecstoadd);
     planetscaleapi(
     vecstoadd
     );

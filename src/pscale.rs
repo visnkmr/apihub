@@ -27,7 +27,7 @@ pub fn pscaleread()->Pool{
     getconn(url)
 }
 pub fn planetscaleapi(datatoadd:Vec<sessioncount>){
-    
+    // createtable(&pscalewrite());
     // println!("Successfully connected to Write to PlanetScale!");
     insertintodb(&pscalewrite(), &datatoadd);
         
@@ -35,6 +35,29 @@ pub fn planetscaleapi(datatoadd:Vec<sessioncount>){
     // println!("Successfully connected to Read from PlanetScale!");
     printdata(&pscaleread());
 
+}
+pub fn createtable(pool:&Pool){
+    let mut conn = pool.get_conn().unwrap();
+    let createtable=format!(
+        "CREATE TABLE ac_oses (
+        date VARCHAR(50) PRIMARY KEY,
+        os_name VARCHAR(50) NOT NULL,
+        count INT NOT NULL
+      );
+      ");
+    let mut saved=false;
+    if let Ok(res) = conn.exec_drop(
+        createtable,{}
+    ) {
+        // let vc:Vec<(String,i32)>=res;
+        println!("added");
+        saved=true;
+    }
+    if !saved {
+
+        println!("gone through");
+    }
+    
 }
 pub fn printdata(pool: &Pool)
 -> Result<Vec<sessioncount>,()>
@@ -56,9 +79,10 @@ pub fn printdata(pool: &Pool)
 fn addtodb(mut conn:&mut PooledConn,esc:&sessioncount)->Result<(),()>{
     let mut saved=false;
     if let Ok(res) = conn.exec(
-        r"INSERT INTO ac_events (date,count)
-          VALUES (?, ?)",
-        (esc.datetime.clone(),esc.count.clone())
+            r"INSERT INTO ac_events (date, count)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE count = IF(VALUES(count) > ac_events.count, VALUES(count), ac_events.count);",
+        (esc.datetime.clone(), esc.count.clone())
     ) {
         let vc:Vec<(String,i32)>=res;
         println!("new record");
@@ -76,7 +100,10 @@ pub fn insertintodb(pool: &Pool, sc:&Vec<sessioncount>) {
     // ];
     let mut conn = pool.get_conn().unwrap();
     for esc in sc{
-        addtodb(&mut conn,esc);
+        if(esc.count>0){
+
+            addtodb(&mut conn,esc);
+        }
     }
     // conn.exec_batch(
     //     r"INSERT INTO ac_events (date,count)

@@ -12,9 +12,12 @@ pub async fn acinit(whattofetch: &str)->Response{
     
     let today = Utc::now();
     let date_28_days_ago = (today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
+    let date_yesterday = (today - chrono::Duration::days(1)).format("%Y-%m-%d").to_string();
+    let date_today = (today ).format("%Y-%m-%d").to_string();
 
-    println!("{}",date_28_days_ago);
-    let get_apps_url = format!("https://api.appcenter.ms/v0.1/apps/{}/{}/analytics/{}?start={}",ac_uname,ac_appname,whattofetch,date_28_days_ago);
+    // println!("{}",date_28_days_ago);
+    let get_apps_url = format!("https://api.appcenter.ms/v0.1/apps/{}/{}/analytics/{}?start={}&end={}&%24top=0",ac_uname,ac_appname,whattofetch,date_28_days_ago,date_yesterday);
+    // let get_apps_url = format!("https://api.appcenter.ms/v0.1/apps/{}/{}/analytics/{}?start={}&end={}&%24top=0",ac_uname,ac_appname,whattofetch,date_28_days_ago,date_today);
     let client = reqwest::Client::new();
     let response = client
         .get(get_apps_url)
@@ -41,7 +44,7 @@ pub async fn appcentervecapi<T: for<'a> serde::Deserialize<'a>>(whattofetch: &st
 pub async fn osapi(whattofetch: &str) -> Result<Vec<oses>, Box<dyn std::error::Error>> {
     // let search_results: Vec<T> = vec![];
     let search_results: osl = acinit(whattofetch).await.json().await?;
-    // println!("{:?}",search_results);
+    println!("{:?}",search_results.total);
     // for eacha in search_results{
 
     //         println!("{:?}", eacha.count);
