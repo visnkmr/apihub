@@ -1,7 +1,8 @@
-use std::env;
+use std::{env, any::TypeId};
 mod stats;
 mod repochanges;
 use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
+use commitstojson::commitstojson;
 use pscale::*;
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
@@ -26,14 +27,35 @@ use crate::{getrepolist::*, commitstruct::*, acenter::*};
 async fn main()-> Result<(), Box<dyn std::error::Error>>{
 
     dotenv().ok();
+
+    let today = Utc::now();
+    let date_28_days_ago = &(today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
+    let date_yesterday = &(today - chrono::Duration::days(1)).format("%Y-%m-%d").to_string();
+    let date_today = &(today ).format("%Y-%m-%d").to_string();
     // commitstojson::commitstojson();
-    let vecstoadd:Vec<sessioncount>=appcentervecapi("session_counts").await?;
-    // let vecstoadd:Vec<eachevent>=eventsapi("events").await?;
-    // let vecstoadd:Vec<oses>=osapi("oses").await?;
+    // println!("{:?}",TypeId::of::<sessioncount>());
+
+    // //add commits to json.
+    // commitstojson();
+
+    // adding session count per day from appcenter to planetscale.
+    // let vecssc:Vec<sessioncount>=appcentervecapi("session_counts",&date_28_days_ago,&date_yesterday).await?;
+    // addtosessiondb(vecssc);
+
+    let vecsevents:Vec<eachevent>=eventsapi("events",&date_28_days_ago,&date_yesterday).await?;
+    println!("{:?}",vecsevents);
+    // addtoeventdb(vecsevents);
+
+    //adding os versions per day from appcenter to planetscale.
+    // for i in 1..27{
+    //     println!("checking {} day before",i);
+    //     let datetofetch=&(today - chrono::Duration::days(i)).format("%Y-%m-%d").to_string();
+    //     let vecstoadd=osapi("oses",&datetofetch,&datetofetch).await?;
+    //     // println!("{}",serde_json::to_string(&vecstoadd.oses).unwrap().len());
+    //     addtoosdb(datetofetch,vecstoadd);
+    // }
     // println!("{:?}",vecstoadd);
-    planetscaleapi(
-    vecstoadd
-    );
+    
     
     Ok(())
 }

@@ -16,12 +16,13 @@ pub struct sessioncount{
     pub datetime:String,
     pub count:i32
 }
-#[derive(Deserialize, Debug)]   
+#[derive(Deserialize, Debug,Serialize)]   
 pub struct osl{
+    // pub date:String,
     pub total:i32,
     pub oses:Vec<oses>
 }
-#[derive(Deserialize, Debug)]   
+#[derive(Deserialize, Debug,Serialize)]   
 pub struct oses{
       pub os_name:String ,
       pub count: i32
@@ -36,12 +37,12 @@ pub struct eventslist{
 #[derive(Deserialize, Debug)]   
 
 pub struct eachevent{
-    id: String,
-    name: String,
-    device_count: i32,
-    previous_device_count: i32,
-    count: i32,
-    previous_count: i32,
-    count_per_device: f32,
-    count_per_session: Option<f32>,
+    pub id: String,
+    pub name: String,
+    pub device_count: i32,
+    pub previous_device_count: i32,
+    pub count: i32,
+    pub previous_count: i32,
+    pub count_per_device: f32,
+    pub count_per_session: Option<f32>,
 }
