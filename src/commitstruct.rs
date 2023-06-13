@@ -31,8 +31,8 @@ pub struct oses{
 
 pub struct eventslist{
     pub events:Vec<eachevent>,
-    total:i32,
-    total_devices:i32
+    pub total:i32,
+    pub total_devices:i32
 }
 #[derive(Deserialize, Debug)]   
 
@@ -45,4 +45,9 @@ pub struct eachevent{
     pub previous_count: i32,
     pub count_per_device: f32,
     pub count_per_session: Option<f32>,
+}
+#[derive(Deserialize, Debug,Serialize)]   
+pub struct eventcount{
+    pub eventname:String,
+    pub count:i32
 }

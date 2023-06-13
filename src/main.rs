@@ -42,9 +42,12 @@ async fn main()-> Result<(), Box<dyn std::error::Error>>{
     // let vecssc:Vec<sessioncount>=appcentervecapi("session_counts",&date_28_days_ago,&date_yesterday).await?;
     // addtosessiondb(vecssc);
 
-    let vecsevents:Vec<eachevent>=eventsapi("events",&date_28_days_ago,&date_yesterday).await?;
-    println!("{:?}",vecsevents);
-    // addtoeventdb(vecsevents);
+    for i in 1..27{  
+        let datetofetch=&(today - chrono::Duration::days(i)).format("%Y-%m-%d").to_string();
+        let (vecsevents)=eventsapi("events",&datetofetch,&datetofetch).await?;
+        // println!("{:?}---{}",serde_json::to_string(&vecsevents).unwrap(),serde_json::to_string(&vecsevents).unwrap().len());
+        addtoeventdb(&datetofetch,vecsevents);
+    }
 
     //adding os versions per day from appcenter to planetscale.
     // for i in 1..27{

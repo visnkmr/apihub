@@ -3,7 +3,7 @@ use std::{env, default, any::TypeId};
 
 use mysql::{Pool,  QueryResult, prelude::Queryable, Params, Row, params, PooledConn};
 use serde::*;
-use crate::commitstruct::{sessioncount, oses, eachevent, osl};
+use crate::commitstruct::{sessioncount, oses, eachevent, osl, eventcount};
 
 pub fn getconn(url:String)->Pool{
 
@@ -42,7 +42,7 @@ pub fn addtoosdb(datetofetch:&str,datatoadd:osl){
     // printdata(&pscaleread());
 
 }
-pub fn addtoeventdb(datetofetch:&str,datatoadd:Vec<eachevent>){
+pub fn addtoeventdb(datetofetch:&str,datatoadd:(Vec<eventcount>,i32)){
     // createtable(&pscalewrite());
     // println!("Successfully connected to Write to PlanetScale!");
     insertintoeventdb(&pscalewrite(),datetofetch, &datatoadd);
@@ -165,14 +165,14 @@ fn addeachtoosdb(mut conn:&mut PooledConn,df:&str,esc:&osl)->Result<(),()>{
     }
     Ok(())
 }
-fn addeachtoecdb(mut conn:&mut PooledConn,df:&str,esc:&eachevent)->Result<(),()>{
+fn addeachtoecdb(mut conn:&mut PooledConn,df:&str,esc:&(Vec<eventcount>,i32))->Result<(),()>{
     let mut saved=false;
 
     if let Ok(res) = conn.exec(
-            r"INSERT INTO ac_oses (date, os_name, count)
+            r"INSERT INTO ac_eventlist (date, eventslist, count)
         VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE count = IF(VALUES(count) > ac_oses.count, VALUES(count), ac_oses.count);",
-        (df.clone(),esc.name.clone(), esc.count.clone())
+        ON DUPLICATE KEY UPDATE count = IF(VALUES(count) > ac_eventlist.count, VALUES(count), ac_eventlist.count);",
+        (df.clone(),serde_json::to_string(&esc.0).unwrap(), esc.1.clone())
     ) {
         let vc:Vec<(String,i32)>=res;
         println!("new record");
@@ -206,17 +206,17 @@ pub fn insertintoscdb(pool: &Pool, sc:&Vec<sessioncount>) {
     
     // Ok(results)
 }
-pub fn insertintoeventdb(pool: &Pool,df:&str, sc:&Vec<eachevent>) {
+pub fn insertintoeventdb(pool: &Pool,df:&str, sc:&(Vec<eventcount>,i32)) {
     // let payments = vec![
     //     sessioncount { datetime: "2023-05-07".to_string(), count: 0 },
     // ];
     let mut conn = pool.get_conn().unwrap();
-    for esc in sc{
-        if(esc.device_count>0){
+    // for esc in sc{
+        if(sc.1>0){
 
-            addeachtoecdb(&mut conn,df,esc);
+            addeachtoecdb(&mut conn,df,sc);
         }
-    }
+    // }
     // conn.exec_batch(
     //     r"INSERT INTO ac_events (date,count)
     //       VALUES (:date, :count)",

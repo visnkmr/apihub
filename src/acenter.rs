@@ -3,7 +3,7 @@ use std::{env, any::TypeId};
 use chrono::Utc;
 use reqwest::Response;
 
-use crate::commitstruct::{sessioncount, osl, oses, eventslist, eachevent};
+use crate::commitstruct::{sessioncount, osl, oses, eventslist, eachevent, eventcount};
 pub async fn acinit(whattofetch: &str,date_start:&str,date_end:&str)->Response{
     let ac_key = env::var("APPCENTER_KEY").unwrap();
     let ac_uname = env::var("APPCENTER_UNAME").unwrap();
@@ -53,13 +53,19 @@ pub async fn osapi(whattofetch: &str,date_start:&str,date_end:&str) -> Result<os
         Ok(search_results)
 }
 
-pub async fn eventsapi(whattofetch: &str,date_start:&str,date_end:&str) -> Result<Vec<eachevent>, Box<dyn std::error::Error>> {
+pub async fn eventsapi(whattofetch: &str,date_start:&str,date_end:&str) -> Result<(Vec<eventcount>,i32), Box<dyn std::error::Error>> {
     // let search_results: Vec<T> = vec![];
-    let search_results: eventslist = acinit(whattofetch,date_start,date_end).await.json().await?;
+    let search_results: eventslist = acinit(whattofetch,&[&date_start,"&%24top=30"].concat(),date_end).await.json().await?;
+    let vecec:Vec<eventcount>=search_results.events.iter().map(|event|{
+        eventcount{
+            eventname:event.name.clone(),
+            count:event.count
+        }
+    }).collect();
     // println!("{:?}",search_results);
     // for eacha in search_results{
 
     //         println!("{:?}", eacha.count);
     //     }
-        Ok(search_results.events)
+        Ok((vecec,search_results.total))
 }
