@@ -27,7 +27,7 @@ use crate::{getrepolist::*, commitstruct::*, acenter::*};
 async fn main()-> Result<(), Box<dyn std::error::Error>>{
 
     dotenv().ok();
-
+    commitstojson();
     let today = Utc::now();
     let date_28_days_ago = &(today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
     let date_yesterday = &(today - chrono::Duration::days(1)).format("%Y-%m-%d").to_string();
@@ -39,8 +39,8 @@ async fn main()-> Result<(), Box<dyn std::error::Error>>{
     // commitstojson();
 
     // adding session count per day from appcenter to planetscale.
-    // let vecssc:Vec<sessioncount>=appcentervecapi("session_counts",&date_28_days_ago,&date_yesterday).await?;
-    // addtosessiondb(vecssc);
+    let vecssc:Vec<sessioncount>=appcentervecapi("session_counts",&date_28_days_ago,&date_yesterday).await?;
+    addtosessiondb(vecssc);
 
     for i in 1..27{  
         let datetofetch=&(today - chrono::Duration::days(i)).format("%Y-%m-%d").to_string();
@@ -50,13 +50,13 @@ async fn main()-> Result<(), Box<dyn std::error::Error>>{
     }
 
     //adding os versions per day from appcenter to planetscale.
-    // for i in 1..27{
-    //     println!("checking {} day before",i);
-    //     let datetofetch=&(today - chrono::Duration::days(i)).format("%Y-%m-%d").to_string();
-    //     let vecstoadd=osapi("oses",&datetofetch,&datetofetch).await?;
-    //     // println!("{}",serde_json::to_string(&vecstoadd.oses).unwrap().len());
-    //     addtoosdb(datetofetch,vecstoadd);
-    // }
+    for i in 1..27{
+        println!("checking {} day before",i);
+        let datetofetch=&(today - chrono::Duration::days(i)).format("%Y-%m-%d").to_string();
+        let vecstoadd=osapi("oses",&datetofetch,&datetofetch).await?;
+        // println!("{}",serde_json::to_string(&vecstoadd.oses).unwrap().len());
+        addtoosdb(datetofetch,vecstoadd);
+    }
     // println!("{:?}",vecstoadd);
     
     

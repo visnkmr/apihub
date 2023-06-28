@@ -1,8 +1,11 @@
 use std::env;
 
 use crate::getcommits::get_recent_commits;
+use dotenv::dotenv;
 
+// #[test]
 pub fn commitstojson() {
+    // dotenv().ok();
     let api_key = env::var("API_KEY").unwrap();
     let server_url = env::var("URL").unwrap();
     let un="12core1";
