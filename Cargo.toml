@@ -12,6 +12,7 @@ chrono="0.4.26"
 rayon="1.7.0"
 dotenv = "0.15.0"
 prefstore= {git="https://github.com/visnkmr/prefstore.git"}
+# prefstore= {path="../../rust/prefstore/prefstore/"}
 serde = {version = "1.0.163", features = ["derive"]}
 mysql="*"
 tokio = { version = "1.28.2", features = ["full"] }
