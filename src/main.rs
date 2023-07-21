@@ -2,7 +2,7 @@ use std::{env, any::TypeId};
 mod stats;
 mod repochanges;
 use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
-use commitstojson::commitstojson;
+// use commitstojson::commitstojson;
 use pscale::*;
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};

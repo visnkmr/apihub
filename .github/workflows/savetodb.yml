@@ -1,0 +1,29 @@
+name: Update Planetscale DB with Appcenter Data
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  # push:
+  #   branches:
+  #     - main
+  #     - 'v*'
+
+jobs:
+  create-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+      - name: run code
+        run: cargo run
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            APPCENTER_KEY: ${{ secrets.APPCENTER_KEY }}
+            APPCENTER_UNAME: ${{ secrets.APPCENTER_UNAME }}
+            APPCENTER_APPNAME: ${{ secrets.APPCENTER_APPNAME }}
+            DATAW: ${{ secrets.DATAW }}
