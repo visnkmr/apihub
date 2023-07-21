@@ -1,9 +1,11 @@
 name: Update Planetscale DB with Appcenter Data
 on:
-  push:
-    branches:
-      - main
-      - 'v*'
+  schedule:
+    - cron: "0 0 * * *"
+  # push:
+  #   branches:
+  #     - main
+  #     - 'v*'
 
 jobs:
   create-release:
