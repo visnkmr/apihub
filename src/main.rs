@@ -3,7 +3,7 @@ mod stats;
 mod repochanges;
 use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
 // use commitstojson::commitstojson;
-use pscale::*;
+// use pscale::*;
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
 use serde::{Serialize, Deserialize, Deserializer};
@@ -14,17 +14,18 @@ mod getcommits;
 mod commitstruct;
 mod reponames;
 mod commitstojson;
-mod pscale;
-mod acenter;
+// mod pscale;
+// mod acenter;
 // #[test]
 //the codeberg and gitea server stats getting api
 
 
 
 
-use crate::{getrepolist::*, commitstruct::*, acenter::*};
-#[tokio::main]
-async fn main()-> Result<(), Box<dyn std::error::Error>>{
+use crate::{getrepolist::*, commitstruct::*};
+// #[tokio::main]
+// async
+ fn main(){
 
     dotenv().ok();
     commitstojson::commitstojson();
@@ -60,7 +61,7 @@ async fn main()-> Result<(), Box<dyn std::error::Error>>{
     // println!("{:?}",vecstoadd);
     
     
-    Ok(())
+    // Ok(())
 }
 
 
