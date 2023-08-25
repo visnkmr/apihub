@@ -26,7 +26,7 @@ use crate::{getrepolist::*, commitstruct::*, acenter::*};
 #[tokio::main]
 async fn main()-> Result<(), Box<dyn std::error::Error>>{
 
-    // dotenv().ok();
+    dotenv().ok();
     commitstojson::commitstojson();
     // let today = Utc::now();
     // let date_28_days_ago = &(today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
