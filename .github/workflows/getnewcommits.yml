@@ -26,8 +26,6 @@ jobs:
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --depth 1  --sparse $REPO .
-          git sparse-checkout reapply --no-cone
-          git sparse-checkout add 'latest/*'
           git checkout
       - name: Run Code
         run: cargo run
