@@ -1,4 +1,4 @@
-name: Fetch-Currencies
+name: Check for new commits and save to json
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for branch 1 and on start directory, command.txt file changes or by manually running the workflow from actions tab
@@ -45,6 +45,6 @@ jobs:
         run: |
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
-          git add --sparse -A
-          git commit -m 'Update Currencies'
+          git add -A
+          git commit -m 'Latest commits log json created.'
           git push
