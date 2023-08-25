@@ -3,7 +3,7 @@ use std::env;
 use crate::getcommits::get_recent_commits;
 use dotenv::dotenv;
 
-#[test]
+// #[test]
 pub fn commitstojson() {
     dotenv().ok();
     let api_key = env::var("API_KEY").unwrap();
@@ -43,7 +43,7 @@ pub fn commitstojson() {
     // // //     println!("{}",i.time)
     // // // }
 
-    prefstore::save_else_where("/tmp/new/gtr.json",serde_json::to_string(&gtr).unwrap());
-    prefstore::save_else_where("/tmp/new/gtrl.json",serde_json::to_string(&gtrl).unwrap());
+    prefstore::save_else_where("./gtr.json",serde_json::to_string(&gtr).unwrap());
+    prefstore::save_else_where("./gtrl.json",serde_json::to_string(&gtrl).unwrap());
     // prefstore::appendcustom("gtr","gtr.json",serde_json::to_string(&gtr1).unwrap());
 }
