@@ -24,7 +24,6 @@ jobs:
     
       # Partial clone
       - name: Partial clone
-        shell: bash
         run: |
           REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --depth 1 --branch getnewcommits $REPO .
@@ -43,7 +42,6 @@ jobs:
       # commiting and pushing changes
       - name: commit and push
         if: ${{ success()}}
-        shell: bash
         run: |
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
