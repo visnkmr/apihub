@@ -55,6 +55,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "apihub"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dotenv",
+ "mysql",
+ "prefstore",
+ "rayon",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "arrayvec"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -701,21 +716,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
-]
-
-[[package]]
-name = "gitearecent"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dotenv",
- "mysql",
- "prefstore",
- "rayon",
- "reqwest",
- "serde",
- "serde_json",
- "tokio",
 ]
 
 [[package]]

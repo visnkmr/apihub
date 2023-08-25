@@ -23,11 +23,10 @@ jobs:
     steps:
     
       # Partial clone
-      - name: Partial clone
-        run: |
-          REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone --depth 1 --branch getnewcommits $REPO .
-          git checkout
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 1
       - name: Run Code
         run: cargo run
         env:
@@ -38,13 +37,23 @@ jobs:
             DATAW: ${{ secrets.DATAW }}
             CODEBERG: ${{ secrets.CODEBERG }}
             CODEBERG_URL: ${{ secrets.CODEBERG_URL }}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Latest commits log json created."
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+      
 
       # commiting and pushing changes
-      - name: commit and push
-        if: ${{ success()}}
-        run: |
-          git config --global user.email 12533753+visnkmr@users.noreply.github.com
-          git config --global user.name github-actions
-          git add -A
-          git commit -m 'Latest commits log json created.'
-          git push
+      # - name: commit and push
+      #   if: ${{ success()}}
+      #   run: |
+      #     git config --global user.email github-actions@github.com
+      #     git config --global user.name github-actions
+      #     git add -A
+      #     git commit -m 'Latest commits log json created.'
+      #     git push
