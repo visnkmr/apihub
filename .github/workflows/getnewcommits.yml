@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Run Code
         run: cargo run
         env:
@@ -42,7 +42,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A
-          git commit -a -m "Latest commits log json created."
+          git commit -m "Latest commits log json created."
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
