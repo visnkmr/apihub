@@ -43,7 +43,7 @@ jobs:
       - name: commit and push
         if: ${{ success()}}
         run: |
-          git config --global user.email github-actions@github.com
+          git config --global user.email 12533753+visnkmr@users.noreply.github.com
           git config --global user.name github-actions
           git add -A
           git commit -m 'Latest commits log json created.'
