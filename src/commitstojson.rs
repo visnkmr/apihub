@@ -6,8 +6,8 @@ use dotenv::dotenv;
 // #[test]
 pub fn commitstojson() {
     dotenv().ok();
-    let api_key = env::var("API_KEY").unwrap();
-    let server_url = env::var("URL").unwrap();
+    // let api_key = env::var("API_KEY").unwrap();
+    // let server_url = env::var("URL").unwrap();
     let un="12core1";
     let c_un="visnk";
     let c_api_key = env::var("CODEBERG").unwrap();
@@ -19,11 +19,11 @@ pub fn commitstojson() {
     // let repolist=get_repos(&server_url, un, &api_key);
     // println!("{:?}",repolist.len());
 
-    let r1=get_recent_commits(&server_url, un, &api_key);
-    let r2=get_recent_commits(&c_server_url, c_un, &c_api_key);
+    // let r1=get_recent_commits(&server_url, un, &api_key);
+    let r1=get_recent_commits(&c_server_url, c_un, &c_api_key);
     let mut gtr=r1.0;
     println!("gitea={:?}",gtr.len());
-    gtr.extend(r2.0);
+    // gtr.extend(r2.0);
     
     // // println!("codeberg+gitea={:?}",gtr.len());
 
@@ -32,7 +32,7 @@ pub fn commitstojson() {
     });
 
     let mut gtrl=r1.1;
-    gtrl.extend(r2.1);
+    // gtrl.extend(r2.1);
     
     println!("codeberg+gitea={:?}",gtr.len());
 
