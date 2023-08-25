@@ -24,11 +24,19 @@ jobs:
       - name: Partial clone
         shell: bash
         run: |
-          REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --depth 1 $REPO .
           git checkout
       - name: Run Code
         run: cargo run
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            APPCENTER_KEY: ${{ secrets.APPCENTER_KEY }}
+            APPCENTER_UNAME: ${{ secrets.APPCENTER_UNAME }}
+            APPCENTER_APPNAME: ${{ secrets.APPCENTER_APPNAME }}
+            DATAW: ${{ secrets.DATAW }}
+            CODEBERG: ${{ secrets.CODEBERG }}
+            CODEBERG_URL: ${{ secrets.CODEBERG_URL }}
 
       # commiting and pushing changes
       - name: commit and push
