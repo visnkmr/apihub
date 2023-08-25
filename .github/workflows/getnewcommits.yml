@@ -25,7 +25,7 @@ jobs:
         shell: bash
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone --depth 1  --sparse $REPO .
+          git clone --depth 1 $REPO .
           git checkout
       - name: Run Code
         run: cargo run
