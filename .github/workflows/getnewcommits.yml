@@ -3,10 +3,10 @@ name: Check for new commits and save to json
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for branch 1 and on start directory, command.txt file changes or by manually running the workflow from actions tab
 on:
-  # push:
-  #     branches: ["getnewcommits"]
+  push:
+      branches: ["getnewcommits"]
   schedule:
-    - cron: '0 0 * * *'  # every day at midnight
+    - cron: "42 12 * * 0-6"  # every day at midnight
 
   workflow_dispatch:
 
