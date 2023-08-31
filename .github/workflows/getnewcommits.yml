@@ -1,0 +1,60 @@
+name: Check for new commits and save to json
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for branch 1 and on start directory, command.txt file changes or by manually running the workflow from actions tab
+on:
+  push:
+      branches: ["getnewcommits"]
+  schedule:
+    - cron: "42 12 * * 0-6"  # every day at midnight
+
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+      # Partial clone
+      - uses: actions/checkout@v3
+        with:
+          ref: getnewcommits
+          fetch-depth: 0
+      - name: Run Code
+        run: cargo run
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            APPCENTER_KEY: ${{ secrets.APPCENTER_KEY }}
+            APPCENTER_UNAME: ${{ secrets.APPCENTER_UNAME }}
+            APPCENTER_APPNAME: ${{ secrets.APPCENTER_APPNAME }}
+            DATAW: ${{ secrets.DATAW }}
+            CODEBERG: ${{ secrets.CODEBERG }}
+            CODEBERG_URL: ${{ secrets.CODEBERG_URL }}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "Latest commits log json created."
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: getnewcommits
+      
+
+      # commiting and pushing changes
+      # - name: commit and push
+      #   if: ${{ success()}}
+      #   run: |
+      #     git config --global user.email github-actions@github.com
+      #     git config --global user.name github-actions
+      #     git add -A
+      #     git commit -m 'Latest commits log json created.'
+      #     git push
