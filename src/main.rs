@@ -16,7 +16,42 @@ mod reponames;
 mod commitstojson;
 mod pscale;
 mod acenter;
-// #[test]
+#[test]
+fn testcode(){
+
+    dotenv().ok();
+    createtable("CREATE TABLE `appcenter_events` (
+        `id` int unsigned NOT NULL AUTO_INCREMENT,
+        `date` varchar(50) NOT NULL,
+        `count` int NOT NULL,
+        PRIMARY KEY (`id`)
+    );");
+    createtable("CREATE TABLE `ac_eventlist` (
+        `date` varchar(50) NOT NULL,
+        `eventslist` varchar(2000) NOT NULL,
+        `count` int NOT NULL,
+        PRIMARY KEY (`date`)
+    );");
+    createtable("CREATE TABLE `ac_events` (
+        `date` varchar(50) NOT NULL,
+        `count` int NOT NULL,
+        PRIMARY KEY (`date`)
+    );");
+    createtable("CREATE TABLE `ac_oses` (
+        `date` varchar(50) NOT NULL,
+        `os_name` varchar(500) NOT NULL,
+        `count` int NOT NULL,
+        PRIMARY KEY (`date`)
+    );");
+    createtable("CREATE TABLE `urls` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `url` json NOT NULL,
+        `uid` binary(16) NOT NULL,
+        `pswd` binary(16) NOT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uid` (`uid`)
+    );");
+}
 //the codeberg and gitea server stats getting api
 
 

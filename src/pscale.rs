@@ -9,13 +9,13 @@ pub fn getconn(url:String)->Pool{
 
     let builder = mysql::OptsBuilder::from_opts(mysql::Opts::from_url(&url).unwrap());
 
-    let pool = mysql::Pool::new(builder.ssl_opts(mysql::SslOpts::default())).unwrap();
+    let pool = mysql::Pool::new(builder.ssl_opts(mysql::SslOpts::default().with_danger_accept_invalid_certs(true))).unwrap();
 
     
     pool
 }
 pub fn pscalewrite()->Pool{
-    let url = env::var("DATAW").unwrap();
+    let url = env::var("DATAW1").unwrap();
     getconn(url)
 }
 pub fn pscaleread()->Pool{
@@ -52,15 +52,9 @@ pub fn addtoeventdb(datetofetch:&str,datatoadd:(Vec<eventcount>,i32)){
     // printdata(&pscaleread());
 
 }
-pub fn createtable(pool:&Pool){
-    let mut conn = pool.get_conn().unwrap();
-    let createtable=format!(
-        "CREATE TABLE ac_oses (
-        date VARCHAR(50) PRIMARY KEY,
-        os_name VARCHAR(50) NOT NULL,
-        count INT NOT NULL
-      );
-      ");
+pub fn createtable(execommand:&str){
+    let mut conn = pscalewrite().get_conn().unwrap();
+    let createtable=format!("{execommand}");
     let mut saved=false;
     if let Ok(res) = conn.exec_drop(
         createtable,{}
