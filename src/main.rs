@@ -21,113 +21,7 @@ mod pscale;
 mod acenter;
 
 //create a struct based on content of sample.json
-// {
-//     "id": 631697041,
-//     "node_id": "R_kgDOJabukQ",
-//     "name": ".github",
-//     "full_name": "visnkmr/.github",
-//     "private": false,
-//     "owner": {
-//         "login": "visnkmr",
-//         "id": 12533753,
-//         "node_id": "MDQ6VXNlcjEyNTMzNzUz",
-//         "avatar_url": "https://avatars.githubusercontent.com/u/12533753?v=4",
-//         "gravatar_id": "",
-//         "url": "https://api.github.com/users/visnkmr",
-//         "html_url": "https://github.com/visnkmr",
-//         "followers_url": "https://api.github.com/users/visnkmr/followers",
-//         "following_url": "https://api.github.com/users/visnkmr/following{/other_user}",
-//         "gists_url": "https://api.github.com/users/visnkmr/gists{/gist_id}",
-//         "starred_url": "https://api.github.com/users/visnkmr/starred{/owner}{/repo}",
-//         "subscriptions_url": "https://api.github.com/users/visnkmr/subscriptions",
-//         "organizations_url": "https://api.github.com/users/visnkmr/orgs",
-//         "repos_url": "https://api.github.com/users/visnkmr/repos",
-//         "events_url": "https://api.github.com/users/visnkmr/events{/privacy}",
-//         "received_events_url": "https://api.github.com/users/visnkmr/received_events",
-//         "type": "User",
-//         "user_view_type": "public",
-//         "site_admin": false
-//     },
-//     "html_url": "https://github.com/visnkmr/.github",
-//     "description": null,
-//     "fork": false,
-//     "url": "https://api.github.com/repos/visnkmr/.github",
-//     "forks_url": "https://api.github.com/repos/visnkmr/.github/forks",
-//     "keys_url": "https://api.github.com/repos/visnkmr/.github/keys{/key_id}",
-//     "collaborators_url": "https://api.github.com/repos/visnkmr/.github/collaborators{/collaborator}",
-//     "teams_url": "https://api.github.com/repos/visnkmr/.github/teams",
-//     "hooks_url": "https://api.github.com/repos/visnkmr/.github/hooks",
-//     "issue_events_url": "https://api.github.com/repos/visnkmr/.github/issues/events{/number}",
-//     "events_url": "https://api.github.com/repos/visnkmr/.github/events",
-//     "assignees_url": "https://api.github.com/repos/visnkmr/.github/assignees{/user}",
-//     "branches_url": "https://api.github.com/repos/visnkmr/.github/branches{/branch}",
-//     "tags_url": "https://api.github.com/repos/visnkmr/.github/tags",
-//     "blobs_url": "https://api.github.com/repos/visnkmr/.github/git/blobs{/sha}",
-//     "git_tags_url": "https://api.github.com/repos/visnkmr/.github/git/tags{/sha}",
-//     "git_refs_url": "https://api.github.com/repos/visnkmr/.github/git/refs{/sha}",
-//     "trees_url": "https://api.github.com/repos/visnkmr/.github/git/trees{/sha}",
-//     "statuses_url": "https://api.github.com/repos/visnkmr/.github/statuses/{sha}",
-//     "languages_url": "https://api.github.com/repos/visnkmr/.github/languages",
-//     "stargazers_url": "https://api.github.com/repos/visnkmr/.github/stargazers",
-//     "contributors_url": "https://api.github.com/repos/visnkmr/.github/contributors",
-//     "subscribers_url": "https://api.github.com/repos/visnkmr/.github/subscribers",
-//     "subscription_url": "https://api.github.com/repos/visnkmr/.github/subscription",
-//     "commits_url": "https://api.github.com/repos/visnkmr/.github/commits{/sha}",
-//     "git_commits_url": "https://api.github.com/repos/visnkmr/.github/git/commits{/sha}",
-//     "comments_url": "https://api.github.com/repos/visnkmr/.github/comments{/number}",
-//     "issue_comment_url": "https://api.github.com/repos/visnkmr/.github/issues/comments{/number}",
-//     "contents_url": "https://api.github.com/repos/visnkmr/.github/contents/{+path}",
-//     "compare_url": "https://api.github.com/repos/visnkmr/.github/compare/{base}...{head}",
-//     "merges_url": "https://api.github.com/repos/visnkmr/.github/merges",
-//     "archive_url": "https://api.github.com/repos/visnkmr/.github/{archive_format}{/ref}",
-//     "downloads_url": "https://api.github.com/repos/visnkmr/.github/downloads",
-//     "issues_url": "https://api.github.com/repos/visnkmr/.github/issues{/number}",
-//     "pulls_url": "https://api.github.com/repos/visnkmr/.github/pulls{/number}",
-//     "milestones_url": "https://api.github.com/repos/visnkmr/.github/milestones{/number}",
-//     "notifications_url": "https://api.github.com/repos/visnkmr/.github/notifications{?since,all,participating}",
-//     "labels_url": "https://api.github.com/repos/visnkmr/.github/labels{/name}",
-//     "releases_url": "https://api.github.com/repos/visnkmr/.github/releases{/id}",
-//     "deployments_url": "https://api.github.com/repos/visnkmr/.github/deployments",
-//     "created_at": "2023-04-23T20:34:48Z",
-//     "updated_at": "2023-04-23T20:34:49Z",
-//     "pushed_at": "2023-12-23T06:06:52Z",
-//     "git_url": "git://github.com/visnkmr/.github.git",
-//     "ssh_url": "git@github.com:visnkmr/.github.git",
-//     "clone_url": "https://github.com/visnkmr/.github.git",
-//     "svn_url": "https://github.com/visnkmr/.github",
-//     "homepage": null,
-//     "size": 16,
-//     "stargazers_count": 0,
-//     "watchers_count": 0,
-//     "language": null,
-//     "has_issues": true,
-//     "has_projects": true,
-//     "has_downloads": true,
-//     "has_wiki": true,
-//     "has_pages": false,
-//     "has_discussions": false,
-//     "forks_count": 0,
-//     "mirror_url": null,
-//     "archived": false,
-//     "disabled": false,
-//     "open_issues_count": 1,
-//     "license": {
-//         "key": "mit",
-//         "name": "MIT License",
-//         "spdx_id": "MIT",
-//         "url": "https://api.github.com/licenses/mit",
-//         "node_id": "MDc6TGljZW5zZTEz"
-//     },
-//     "allow_forking": true,
-//     "is_template": false,
-//     "web_commit_signoff_required": false,
-//     "topics": [],
-//     "visibility": "public",
-//     "forks": 0,
-//     "open_issues": 1,
-//     "watchers": 0,
-//     "default_branch": "main"
-// },
+
 #[derive(Deserialize)]
 struct Owner {
     login: String,
@@ -248,20 +142,37 @@ fn getissuescount(){
     // Read the JSON file
     let json_data = fs::read_to_string("sample.json").unwrap();
     
-    // Parse the JSON data into a vector of Repository structs
+   
     let mut repos: Vec<Repository> = serde_json::from_str(&json_data).unwrap();
     //sort by no of open issues
     repos.sort_by(|a, b|{
         b.open_issues_count.cmp(&a.open_issues_count)
     });
+     // Parse the JSON data into a vector of Repository structs
+     for repo in repos.iter().clone() {
+         println!("{}================== {}", repo.name, repo.open_issues_count);
+                 
+     }
     //collect repo names of top 7 repos with most issues
-    let top_repos = repos.iter().take(7).map(|repo| repo.name.clone()).collect::<Vec<String>>();
+    let top_repos = repos.iter().clone().take(7).map(|repo| repo.name.clone()).collect::<Vec<String>>();
     println!("{:?}",top_repos);
     // Print the open issues count for each repository
-    // for repo in repos {
-    //     println!("{}================== {}", repo.name, repo.open_issues_count);
-                
+    // let client = Client::new();
+    // let mut headers = HeaderMap::new();
+    // headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
+    // headers.insert(AUTHORIZATION, format!("Bearer {}", env::var("GITHUB_TOKEN").unwrap()).parse().unwrap());
+    // //fetch issues per repo using the github api @ url https://api.github.com/repos/{owner}/{repo}/issues
+    // let mut issues_per_repo = Vec::new();
+    // for repo in top_repos {
+    //     let url = format!("https://api.github.com/repos/visnkmr/{}/issues", repo);
+    //     let response = client.get(&url).headers(headers.clone()).send().unwrap();
+    //     let issues = response.json::<Vec<Value>>().unwrap();
+    //     issues_per_repo.push((repo, issues.len()));
     // }
+
+
+
+    
 }
 
 
