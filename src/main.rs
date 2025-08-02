@@ -5,7 +5,7 @@ use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
 // use commitstojson::commitstojson;
 // use pscale::*;
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
-use reqwest::{blocking::Client, header::{HeaderMap, CONTENT_TYPE, AUTHORIZATION}};
+use reqwest::{blocking::Client, header::{HeaderMap, AUTHORIZATION, CONTENT_TYPE, USER_AGENT}};
 use serde::{Serialize, Deserialize, Deserializer};
 use serde_json::{Value, json};
 use dotenv::dotenv;
@@ -21,6 +21,87 @@ mod pscale;
 mod acenter;
 
 //create a struct based on content of sample.json
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Issue {
+    url: String,
+    repository_url: String,
+    labels_url: String,
+    comments_url: String,
+    events_url: String,
+    html_url: String,
+    id: u64,
+    node_id: String,
+    number: u32,
+    title: String,
+    user: User,
+    labels: Vec<::serde_json::Value>, // Simplified since it's empty
+    state: String,
+    locked: bool,
+    assignee: Option<::serde_json::Value>,
+    assignees: Vec<::serde_json::Value>,
+    milestone: Option<::serde_json::Value>,
+    comments: u32,
+    created_at: String,
+    updated_at: String,
+    closed_at: Option<String>,
+    author_association: String,
+    active_lock_reason: Option<::serde_json::Value>,
+    sub_issues_summary: SubIssuesSummary,
+    body: String,
+    closed_by: Option<::serde_json::Value>,
+    reactions: Reactions,
+    timeline_url: String,
+    performed_via_github_app: Option<::serde_json::Value>,
+    state_reason: Option<::serde_json::Value>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct User {
+    login: String,
+    id: u64,
+    node_id: String,
+    avatar_url: String,
+    gravatar_id: String,
+    url: String,
+    html_url: String,
+    followers_url: String,
+    following_url: String,
+    gists_url: String,
+    starred_url: String,
+    subscriptions_url: String,
+    organizations_url: String,
+    repos_url: String,
+    events_url: String,
+    received_events_url: String,
+    #[serde(rename = "type")]
+    user_type: String,
+    user_view_type: String,
+    site_admin: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct SubIssuesSummary {
+    total: u32,
+    completed: u32,
+    percent_completed: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Reactions {
+    url: String,
+    total_count: u32,
+    #[serde(rename = "+1")]
+    plus_one: u32,
+    #[serde(rename = "-1")]
+    minus_one: u32,
+    laugh: u32,
+    hooray: u32,
+    confused: u32,
+    heart: u32,
+    rocket: u32,
+    eyes: u32,
+}
 
 #[derive(Deserialize)]
 struct Owner {
@@ -157,19 +238,33 @@ fn getissuescount(){
     let top_repos = repos.iter().clone().take(7).map(|repo| repo.name.clone()).collect::<Vec<String>>();
     println!("{:?}",top_repos);
     // Print the open issues count for each repository
-    // let client = Client::new();
-    // let mut headers = HeaderMap::new();
-    // headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
-    // headers.insert(AUTHORIZATION, format!("Bearer {}", env::var("GITHUB_TOKEN").unwrap()).parse().unwrap());
-    // //fetch issues per repo using the github api @ url https://api.github.com/repos/{owner}/{repo}/issues
-    // let mut issues_per_repo = Vec::new();
-    // for repo in top_repos {
-    //     let url = format!("https://api.github.com/repos/visnkmr/{}/issues", repo);
-    //     let response = client.get(&url).headers(headers.clone()).send().unwrap();
-    //     let issues = response.json::<Vec<Value>>().unwrap();
-    //     issues_per_repo.push((repo, issues.len()));
-    // }
+    let client = Client::new();
+    let mut headers = HeaderMap::new();
+    headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
+    headers.insert(USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36".parse().unwrap());
+    // headers.insert(AUTHORIZATION, format!("token {}", env::var("GITHUB_TOKEN").unwrap()).parse().unwrap());
 
+    // let mut issues=vec![];
+    let mut issues_count_per_repo = Vec::new();
+    let mut issues_per_repo = Vec::new();
+
+    //fetch issues per repo using the github api @ url https://api.github.com/repos/{owner}/{repo}/issues
+    for repo in top_repos.iter().clone() {
+        let url = format!("https://api.github.com/repos/visnkmr/{}/issues", repo);
+        println!("{}================== {}", repo, url);
+        let response = client.get(&url).headers(headers.clone()).send().unwrap();
+        println!("{}================== {}", repo, response.status());
+        let issues = response.json::<Vec<Issue>>().map_err(|e| format!("Failed to parse JSON: {}", e)).unwrap();
+        issues_count_per_repo.push((repo, issues.iter().clone().take(1).map(|issue| issue.number.clone()).collect::<Vec<u32>>()));
+        issues_per_repo.push((repo, issues));
+    }
+    //get last 5 issues from each repo
+    for issues in issues_per_repo.iter().clone() {
+            for eachissue in issues.1.iter().clone().take(5) {
+            println!("{}================== {}", eachissue.title, eachissue.html_url);
+        }
+    }
+    println!("{:?}",issues_per_repo);
 
 
     
