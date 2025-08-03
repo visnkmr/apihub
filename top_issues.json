@@ -186,6 +186,37 @@
     "repo_name": "visnkmr/nokeyboard"
   },
   {
+    "html_url": "https://github.com/visnkmr/filedime",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Tauriv2",
+        "url": "https://github.com/visnkmr/filedime/pull/33"
+      },
+      {
+        "comment_count": 0,
+        "title": "Update release.yml",
+        "url": "https://github.com/visnkmr/filedime/pull/32"
+      },
+      {
+        "comment_count": 0,
+        "title": "update version of libwebkit2gtk",
+        "url": "https://github.com/visnkmr/filedime/pull/31"
+      },
+      {
+        "comment_count": 2,
+        "title": "\"error[E0282]: type annotations needed for `Box<_>`\" encountered when trying to build",
+        "url": "https://github.com/visnkmr/filedime/issues/30"
+      },
+      {
+        "comment_count": 0,
+        "title": "doesnt show ramdisk correctly in drives list",
+        "url": "https://github.com/visnkmr/filedime/issues/26"
+      }
+    ],
+    "repo_name": "visnkmr/filedime"
+  },
+  {
     "html_url": "https://github.com/visnkmr/visnkmr",
     "issues": [
       {

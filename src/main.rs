@@ -47,8 +47,8 @@ struct Issue {
     closed_at: Option<String>,
     author_association: String,
     active_lock_reason: Option<::serde_json::Value>,
-    sub_issues_summary: SubIssuesSummary,
-    body: String,
+    sub_issues_summary: Option<SubIssuesSummary>,
+    body: Option<String>,
     closed_by: Option<::serde_json::Value>,
     reactions: Reactions,
     timeline_url: String,
@@ -327,7 +327,7 @@ use crate::{getrepolist::*, commitstruct::*};
 
     dotenv().ok();
     getissuescount();
-    commitstojson::commitstojson();
+    // commitstojson::commitstojson();
     // let today = Utc::now();
     // let date_28_days_ago = &(today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
     // let date_yesterday = &(today - chrono::Duration::days(1)).format("%Y-%m-%d").to_string();
