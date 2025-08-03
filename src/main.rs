@@ -276,18 +276,11 @@ let issues = match response.json::<Vec<Issue>>() {
     // Save issues count per repo as JSON
     let mut issues_count_json: Vec<serde_json::Value> = issues_count_per_repo.iter().map(|(repo_name, issue_numbers,)| {
         json!({
-            "repo_name":  repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.full_name )).unwrap_or_default(),
+            "repo_name":  repos.iter().find(|r|r.name==**repo_name).map(|r| r.full_name.clone()).unwrap_or_else(|| repo_name.to_string()),
+"html_url": repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.html_url )).unwrap_or_else(|| format!("https://github.com/visnkmr/{}", repo_name)),
             "issue_count": issue_numbers.first().unwrap_or(&0),
-            "html_url": repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.html_url )).unwrap_or_default()
         })
     }).collect();
-    issues_count_json.push(
-        json!({
-            "repo_name": "visnkmr/visnkmr",
-            "issue_count": issues_count_per_repo.iter().map(|(_, issue_numbers)| issue_numbers.first().unwrap_or(&0)).sum::<u32>(),
-            "html_url": "https://github.com/visnkmr/visnkmr"
-        })
-    );
     
     fs::write("issues_count.json", serde_json::to_string_pretty(&issues_count_json).unwrap()).unwrap();
     
