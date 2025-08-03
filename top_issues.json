@@ -1,0 +1,219 @@
+[
+  {
+    "html_url": "https://github.com/visnkmr/file_explorer",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'long java.lang.Long.longValue()' on a null object reference in visnkmr.apps.filexplorer.a.a",
+        "url": "https://github.com/visnkmr/file_explorer/issues/376"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.util.ConcurrentModificationException: java.util.ConcurrentModificationException in visnkmr.apps.filexplorer.FileChooser.r",
+        "url": "https://github.com/visnkmr/file_explorer/issues/375"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.StackOverflowError: stack size 1042KB in visnkmr.apps.filexplorer.a.a",
+        "url": "https://github.com/visnkmr/file_explorer/issues/374"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.content.pm.action.REQUEST_PERMISSIONS pkg=com.android.packageinstaller (has extras) } in l.a.a",
+        "url": "https://github.com/visnkmr/file_explorer/issues/373"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.IllegalArgumentException: View=com.android.internal.policy.impl.PhoneWindow$DecorView{2734e81b V.E..... R.....I. 0,0-580,173} not attached to window manager in android.view.WindowManagerGlobal.findViewLocked (WindowManagerGlobal.java:407)",
+        "url": "https://github.com/visnkmr/file_explorer/issues/372"
+      }
+    ],
+    "repo_name": "visnkmr/file_explorer"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/taotlus",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.SecurityException: Permission Denial: starting Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 pkg=com.amazon.ftv.profilepicker cmp=com.amazon.ftv.profilepicker/.ui.PickerActivity } from ProcessRecord{784296c 18402:io.github.visnkmr.quicklaunch/u0a1176} (pid=18402, uid=11176) requires com.amazon.profilepicker.permission.LAUNCH in android.os.Parcel.readException (Parcel.java:1694)",
+        "url": "https://github.com/visnkmr/taotlus/issues/112"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.SecurityException: Permission Denial: starting Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 pkg=com.amazon.vizzini.ftvcds cmp=com.amazon.vizzini.ftvcds/.StubActivity } from ProcessRecord{7438cff 18088:io.github.visnkmr.quicklaunch/u0a1176} (pid=18088, uid=11176) requires amazon.speech.permission.SEND_DATA_TO_ALEXA in android.os.Parcel.readException (Parcel.java:1694)",
+        "url": "https://github.com/visnkmr/taotlus/issues/111"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.IllegalArgumentException: parameter must be a descendant of this view in android.view.ViewGroup.offsetRectBetweenParentAndChild (ViewGroup.java:6272)",
+        "url": "https://github.com/visnkmr/taotlus/issues/110"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix android.os.RemoteException: Remote stack trace:\n\tat android.view.SurfaceControl.nativeCreate(Native Method)\n\tat android.view.SurfaceControl.<init>(SurfaceControl.java:598)\n\tat android.view.SurfaceControl.<init>(SurfaceControl.java:67)\n\tat android.view.SurfaceControl$Builder.build(SurfaceControl.java:385)\n\tat com.android.server.wm.WindowContainer.onParentSet(WindowContainer.java:184)\n in com.microsoft.appcenter.crashes.Crashes.a",
+        "url": "https://github.com/visnkmr/taotlus/issues/109"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.util.concurrent.TimeoutException: com.android.internal.os.BinderInternal$GcWatcher.finalize() timed out after 10 seconds in java.lang.Object.wait",
+        "url": "https://github.com/visnkmr/taotlus/issues/108"
+      }
+    ],
+    "repo_name": "visnkmr/taotlus"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/netspeed-test",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'boolean androidx.core.view.p.a(android.view.MotionEvent)' on a null object reference in io.github.visnkmr.mynetspeedtest.MainActivity.onTouchEvent",
+        "url": "https://github.com/visnkmr/netspeed-test/issues/92"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'boolean androidx.core.view.p.a(android.view.MotionEvent)' on a null object reference in io.github.visnkmr.mynetspeedtest.MainActivity.onTouchEvent",
+        "url": "https://github.com/visnkmr/netspeed-test/issues/91"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'int android.view.View.getVisibility()' on a null object reference in io.github.visnkmr.mynetspeedtest.MainActivity.onBackPressed",
+        "url": "https://github.com/visnkmr/netspeed-test/issues/90"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.ArithmeticException: divide by zero in io.github.visnkmr.mynetspeedtest.expired$c.onClick",
+        "url": "https://github.com/visnkmr/netspeed-test/issues/89"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'int android.view.View.getVisibility()' on a null object reference in io.github.visnkmr.mynetspeedtest.MainActivity.onBackPressed",
+        "url": "https://github.com/visnkmr/netspeed-test/issues/88"
+      }
+    ],
+    "repo_name": "visnkmr/netspeed-test"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/teave",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Fix android.os.RemoteException: Remote stack trace:\n\tat android.view.SurfaceControl.nativeCreate(Native Method)\n\tat android.view.SurfaceControl.<init>(SurfaceControl.java:598)\n\tat android.view.SurfaceControl.<init>(SurfaceControl.java:67)\n\tat android.view.SurfaceControl$Builder.build(SurfaceControl.java:385)\n\tat com.android.server.wm.WindowContainer.onParentSet(WindowContainer.java:184)\n in com.microsoft.appcenter.crashes.Crashes.a",
+        "url": "https://github.com/visnkmr/teave/issues/54"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.IllegalStateException: Cannot get profile for destroyed WebView. in org.chromium.android_webview.media_integrity.AwMediaIntegrityServiceImpl.getIntegrityProvider (AMAZON_VERSION.json:code):281)",
+        "url": "https://github.com/visnkmr/teave/issues/53"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix android.content.ActivityNotFoundException: Unable to find explicit activity class {com.amazon.venezia/com.amazon.venezia.AuthActivityToAliasInManifest}; have you declared this activity in your AndroidManifest.xml? in com.amazon.android.j.f.a",
+        "url": "https://github.com/visnkmr/teave/issues/52"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String java.lang.String.toLowerCase()' on a null object reference in io.github.visnkmr.teave.FileChooser.d",
+        "url": "https://github.com/visnkmr/teave/issues/51"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String android.content.Context.getPackageName()' on a null object reference in com.amazon.android.framework.prompt.i.a",
+        "url": "https://github.com/visnkmr/teave/issues/50"
+      }
+    ],
+    "repo_name": "visnkmr/teave"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/backgroundappslist",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.NullPointerException: Attempt to invoke virtual method 'java.util.Iterator java.util.ArrayList.iterator()' on a null object reference in io.github.visnkmr.bapl.MainActivity.C",
+        "url": "https://github.com/visnkmr/backgroundappslist/issues/1302"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@3c635222 is not valid; is your activity running? in android.view.ViewRootImpl.setView (ViewRootImpl.java:592)",
+        "url": "https://github.com/visnkmr/backgroundappslist/issues/1301"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.ArrayIndexOutOfBoundsException: length=10; index=-1 in io.github.visnkmr.bapl.MainActivity.a",
+        "url": "https://github.com/visnkmr/backgroundappslist/issues/1300"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.ArithmeticException: divide by zero in io.github.visnkmr.bapl.MainActivity$o0.onClick",
+        "url": "https://github.com/visnkmr/backgroundappslist/issues/1299"
+      },
+      {
+        "comment_count": 0,
+        "title": "Fix java.lang.ArrayIndexOutOfBoundsException: length=10; index=-1 in java.util.ArrayList.get (ArrayList.java:413)",
+        "url": "https://github.com/visnkmr/backgroundappslist/issues/1298"
+      }
+    ],
+    "repo_name": "visnkmr/backgroundappslist"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/nokeyboard",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Request for a Persistent Version of the App for Zebra Handheld Scanners",
+        "url": "https://github.com/visnkmr/nokeyboard/issues/13"
+      },
+      {
+        "comment_count": 3,
+        "title": "New update and preferably optional setting to disable the app verification and stay at current version for offline devices",
+        "url": "https://github.com/visnkmr/nokeyboard/issues/12"
+      },
+      {
+        "comment_count": 1,
+        "title": "Keyboard not working (Please check the date on your device)",
+        "url": "https://github.com/visnkmr/nokeyboard/issues/10"
+      },
+      {
+        "comment_count": 0,
+        "title": "Just a little bit to be a perfect keyboard!",
+        "url": "https://github.com/visnkmr/nokeyboard/issues/9"
+      },
+      {
+        "comment_count": 0,
+        "title": "Crash on startup - Ver. 2.0G5i",
+        "url": "https://github.com/visnkmr/nokeyboard/issues/8"
+      }
+    ],
+    "repo_name": "visnkmr/nokeyboard"
+  },
+  {
+    "html_url": "https://github.com/visnkmr/visnkmr",
+    "issues": [
+      {
+        "comment_count": 0,
+        "title": "Update",
+        "url": "https://github.com/visnkmr/visnkmr/issues/87"
+      },
+      {
+        "comment_count": 1,
+        "title": "Update",
+        "url": "https://github.com/visnkmr/visnkmr/issues/86"
+      },
+      {
+        "comment_count": 3,
+        "title": "Amazon Fire TV Needs Update to Background Apps & Process List",
+        "url": "https://github.com/visnkmr/visnkmr/issues/85"
+      },
+      {
+        "comment_count": 2,
+        "title": "Update please",
+        "url": "https://github.com/visnkmr/visnkmr/issues/84"
+      },
+      {
+        "comment_count": 0,
+        "title": "Background apps and processes lists",
+        "url": "https://github.com/visnkmr/visnkmr/issues/83"
+      }
+    ],
+    "repo_name": "visnkmr"
+  }
+]

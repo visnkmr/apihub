@@ -235,7 +235,8 @@ fn getissuescount(){
                  
      }
     //collect repo names of top 7 repos with most issues
-    let top_repos = repos.iter().clone().take(7).map(|repo| repo.name.clone()).collect::<Vec<String>>();
+    let mut top_repos = repos.iter().clone().take(7).map(|repo| repo.name.clone()).collect::<Vec<String>>();
+    top_repos.push("visnkmr".to_string());
     println!("{:?}",top_repos);
     // Print the open issues count for each repository
     let client = Client::new();
@@ -253,8 +254,15 @@ fn getissuescount(){
         let url = format!("https://api.github.com/repos/visnkmr/{}/issues", repo);
         println!("{}================== {}", repo, url);
         let response = client.get(&url).headers(headers.clone()).send().unwrap();
-        println!("{}================== {}", repo, response.status());
-        let issues = response.json::<Vec<Issue>>().map_err(|e| format!("Failed to parse JSON: {}", e)).unwrap();
+        // println!("{}================== {}", repo, response.status());
+let issues = match response.json::<Vec<Issue>>() {
+            Ok(issues) => issues,
+            Err(e) => {
+                println!("Failed to parse JSON for repo {}: {}", repo, e);
+                // println!("Response status: {}", response.status());
+                continue;
+            }
+        };
         issues_count_per_repo.push((repo, issues.iter().clone().take(1).map(|issue| issue.number.clone()).collect::<Vec<u32>>()));
         issues_per_repo.push((repo, issues));
     }
@@ -265,6 +273,42 @@ fn getissuescount(){
         }
     }
     println!("{:?}",issues_per_repo);
+    // Save issues count per repo as JSON
+    let mut issues_count_json: Vec<serde_json::Value> = issues_count_per_repo.iter().map(|(repo_name, issue_numbers,)| {
+        json!({
+            "repo_name":  repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.full_name )).unwrap_or_default(),
+            "issue_count": issue_numbers.first().unwrap_or(&0),
+            "html_url": repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.html_url )).unwrap_or_default()
+        })
+    }).collect();
+    issues_count_json.push(
+        json!({
+            "repo_name": "visnkmr/visnkmr",
+            "issue_count": issues_count_per_repo.iter().map(|(_, issue_numbers)| issue_numbers.first().unwrap_or(&0)).sum::<u32>(),
+            "html_url": "https://github.com/visnkmr/visnkmr"
+        })
+    );
+    
+    fs::write("issues_count.json", serde_json::to_string_pretty(&issues_count_json).unwrap()).unwrap();
+    
+    // Save top 5 issues per repo as JSON
+    let top_issues_json: Vec<serde_json::Value> = issues_per_repo.iter().map(|(repo_name, issues)| {
+        let top_5_issues: Vec<serde_json::Value> = issues.iter().take(5).map(|issue| {
+            json!({
+                "title": issue.title,
+                "comment_count": issue.comments,
+                "url": issue.html_url
+            })
+        }).collect();
+        
+        json!({
+            "issues": top_5_issues,
+"repo_name":  repos.iter().find(|r|r.name==**repo_name).map(|r| r.full_name.clone()).unwrap_or_else(|| repo_name.to_string()),
+"html_url": repos.iter().find(|r|r.name==**repo_name).map(|r| format!("{}",r.html_url )).unwrap_or_else(|| format!("https://github.com/visnkmr/{}", repo_name))
+        })
+    }).collect();
+    
+    fs::write("top_issues.json", serde_json::to_string_pretty(&top_issues_json).unwrap()).unwrap();
 
 
     
@@ -283,7 +327,7 @@ use crate::{getrepolist::*, commitstruct::*};
 
     dotenv().ok();
     getissuescount();
-    // commitstojson::commitstojson();
+    commitstojson::commitstojson();
     // let today = Utc::now();
     // let date_28_days_ago = &(today - chrono::Duration::days(27)).format("%Y-%m-%d").to_string();
     // let date_yesterday = &(today - chrono::Duration::days(1)).format("%Y-%m-%d").to_string();
